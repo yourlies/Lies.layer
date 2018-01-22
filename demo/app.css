@@ -1,0 +1,38 @@
+.layer.container {
+  position: fixed;
+  border: 1px solid #eaeaea;
+  padding-bottom: 20px;
+  width: 350px;
+  left: 200px;
+  top: 200px;
+  font-size: 14px;
+}
+.layer .header {
+  border-bottom: 1px solid #eaeaea;
+  background-color: #f7f7f7;
+  padding: 8px 10px;
+  font-weight: bold;
+  color: #333;
+}
+.layer .content {
+  text-align: center;
+  padding: 30px;
+}
+.layer .footer {
+  text-align: center;
+}
+ span + span {
+  margin-left: 10px;
+}
+.layer .footer span {
+  cursor: pointer;
+  display: inline-block;
+  border: 1px solid #eaeaea;
+  padding: 5px 20px;
+  border-radius: 3px;
+}
+.layer .footer span.primary {
+  border: 1px solid #40bb8a;
+  background-color: #40bb8a;
+  color: #fff;
+}

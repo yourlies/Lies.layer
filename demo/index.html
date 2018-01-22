@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>demo</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="./app.css">
+</head>
+<body>
+  <!-- 声明式弹窗组件 -->
+  <!-- click后面跟事件，create表示弹窗，cancel表示关闭弹窗 -->
+  <!-- id后面跟该弹窗的唯一id，可以替换弹窗中的content和footer -->
+  <span --click="create|state.data.layer" --id="demo">点我出弹窗</span>
+  <span --click="cancel">点我关闭弹窗</span>
+  <!-- 自定义节点 -->
+  <div --demo="content" style="text-align: center; padding: 30px 0;">老乡开门啊</div>
+  <span
+    class="primary"
+    --demo="footer"
+    --click="bind|state.methods.submit">开门</span>
+  <span
+    --demo="footer"
+    --click="cancel">不开</span>
+  <!--// 自定义节点 //-->
+  <script>
+    self.state = {};
+  </script>
+  <script src="../lies.layer.js"></script>
+  <script>
+    state.data = {
+      layer: {
+        header: '我们决不拿老乡的一针一线',
+      }
+    }
+    state.methods = {
+      submit: function () {
+        this.cancel();
+      }
+    }
+  </script>
+</body>
+</html>
