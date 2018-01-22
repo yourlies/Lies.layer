@@ -44,18 +44,26 @@
   </style>
 </head>
 <body>
-  <span --click="create|state.test" --id="fca1">点我出弹窗</span>
+  <span --click="create|state.data.layer" --id="fca1">点我出弹窗</span>
   <span --click="cancel">点我关闭弹窗</span>
-
   <div --fca1="content" style="text-align: center; padding: 30px 0;">我是一只猫，快乐的星猫</div>
+  <span --fca1="footer" --click="bind|state.methods.submit">雷猴</span>
+  <span --fca1="footer" --click="cancel">取消</span>
   <script>
-    self.state = {};    
+    self.state = {};
   </script>
   <script src="./lies.layer.js"></script>
   <script>
-    state.test = {
-      header: '我们决不拿老乡的一针一线',
-      content: '老乡，听说你还有个闺女？',
+    state.data = {
+      layer: {
+        header: '我们决不拿老乡的一针一线',
+        content: '老乡，听说你还有个闺女？',
+      }
+    }
+    state.methods = {
+      submit: function () {
+        this.cancel();
+      }
     }
   </script>
 </body>

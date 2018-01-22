@@ -45,9 +45,17 @@
     }
   }
 
-  LiesLayer.prototype.renderFooter = function () {
-    footer.appendChild(submit);
-    footer.appendChild(cancel);
+  LiesLayer.prototype.renderFooter = function (context) {
+    if (context && context.length) {
+      for (var i = 0; i < context.length; i++) {
+        footer.appendChild(context[i]);
+      }
+    } else if (context) {
+      footer.appendChild(context);
+    } else {
+      footer.appendChild(submit);
+      footer.appendChild(cancel);
+    }
   }
 
   LiesLayer.prototype.render = function () {
@@ -65,6 +73,21 @@
   var Layer = new LiesLayer;
   var cls = document.querySelectorAll('[--click]');
 
+  var directives = {};
+
+  var createLayer = function (payload) {
+    Layer.renderHeader(payload.header);
+    Layer.renderContent(payload.content);
+    Layer.renderFooter(payload.footer);
+    Layer.render();
+  }
+
+  var cancelLayer = function (payload) {
+    Layer.delete();
+  }
+
+  directives.cancel = cancelLayer;
+
   var dispatcher = function (event, payload) {
     switch (event) {
       case 'create':
@@ -73,21 +96,13 @@
       case 'cancel':
         cancelLayer();
         break;
+      case 'bind':
+        payload.apply(directives);
+        break;
       default:
         console.error('Undefined event');
         break;
     }
-  }
-
-  var createLayer = function (payload) {
-    Layer.renderHeader(payload.header);
-    Layer.renderContent(payload.content);
-    Layer.renderFooter();
-    Layer.render();
-  }
-
-  var cancelLayer = function (payload) {
-    Layer.delete();
   }
 
   var processor = {};
@@ -103,12 +118,20 @@
       if (refContent) {
         refContent.parentNode.removeChild(refContent);
       }
+
+      refFooter = document.querySelectorAll('[--' + refId + '=footer]');
+      if (refFooter) {
+        for (var i = 0; i < refFooter.length; i++) {
+          refFooter[i].parentNode.removeChild(refFooter[i]);          
+        }
+      }
     }
 
     ref.addEventListener('click', function () {
       var event = chips[0];
       var payload = eval(chips[1] || '') || {};
       payload.content = refContent || payload.content;
+      payload.footer = refFooter || payload.footer;
       dispatcher(event, payload);
     })
   }
