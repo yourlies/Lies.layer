@@ -1,4 +1,5 @@
 (function () {
+  'use strict';
   self.LiesLayer = function () {};
 
   var container = document.createElement('div');
@@ -46,6 +47,7 @@
   }
 
   LiesLayer.prototype.renderFooter = function (context) {
+    footer.innerHTML = '';
     if (context && context.length) {
       for (var i = 0; i < context.length; i++) {
         footer.appendChild(context[i]);
@@ -113,6 +115,7 @@
 
     var refId = ref.getAttribute('--id');
     var refContent = '';
+    var refFooter = '';
     if (refId) {
       refContent = document.querySelector('[--' + refId + '=content]');
       if (refContent) {
@@ -130,9 +133,17 @@
     ref.addEventListener('click', function () {
       var event = chips[0];
       var payload = eval(chips[1] || '') || {};
-      payload.content = refContent || payload.content;
-      payload.footer = refFooter || payload.footer;
-      dispatcher(event, payload);
+      if (typeof payload == 'object') {
+        var tPayload = {};
+        for (var pro in payload) {
+          tPayload[pro] = payload[pro];
+        }
+        tPayload.content = refContent || tPayload.content;
+        tPayload.footer = refFooter || tPayload.footer;
+        dispatcher(event, tPayload);
+      } else {
+        dispatcher(event, payload);        
+      }
     })
   }
 
@@ -147,7 +158,7 @@
 
   Layer.renderSpans({
     type: 'submit',
-    content: '交出女儿',
+    content: '确定',
     className: ['submit', 'primary'],
   });
 
@@ -157,7 +168,7 @@
 
   Layer.renderSpans({
     type: 'cancel',
-    content: '交出女儿',
+    content: '取消',
   });
 
   Layer.spans.cancel.addEventListener('click', function () {

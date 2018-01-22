@@ -6,30 +6,51 @@
   <link rel="stylesheet" href="./app.css">
 </head>
 <body>
-  <!-- 声明式弹窗组件 -->
-  <!-- click后面跟事件，create表示弹窗，cancel表示关闭弹窗 -->
-  <!-- id后面跟该弹窗的唯一id，可以替换弹窗中的content和footer -->
-  <span --click="create|state.data.layer" --id="demo">点我出弹窗</span>
+  <!-- 弹窗样式A -->
+  <span --click="create|state.data.layerA">点我出弹窗样式A</span>
+  <!-- 弹窗样式B -->
+  <span --click="create|state.data.layerB" --id="demoB">点我出弹窗样式B</span>
+  <!-- 弹窗样式C -->
+  <span --click="create|state.data.layerC" --id="demoC">点我出弹窗样式C</span>
+  <!-- 关闭弹窗 -->
   <span --click="cancel">点我关闭弹窗</span>
-  <!-- 自定义节点 -->
-  <div --demo="content" style="text-align: center; padding: 30px 0;">老乡开门啊</div>
+  <!-- 弹窗样式B的自定义节点 -->
+  <div --demoB="content" style="text-align: center; padding: 30px 0;">
+    你把我召唤出来，你要实现我1001个愿望
+  </div>
   <span
     class="primary"
-    --demo="footer"
-    --click="bind|state.methods.submit">开门</span>
+    --demoB="footer"
+    --click="bind|state.methods.submit">实现</span>
   <span
-    --demo="footer"
-    --click="cancel">不开</span>
+    --demoB="footer"
+    --click="cancel">不实现</span>
+  <!--// 自定义节点 //-->
+  <!-- 弹窗样式B的自定义节点 -->
+  <div --demoC="content" style="text-align: center; padding: 30px 0;">
+    你好啊，先森
+  </div>
+  <span
+    class="primary"
+    --demoC="footer"
+    --click="bind|state.methods.submit">你好</span>
   <!--// 自定义节点 //-->
   <script>
     self.state = {};
   </script>
-  <script src="./app.js"></script>
+  <script src="../lies.layer.js"></script>
   <script>
     state.data = {
-      layer: {
-        header: '我们决不拿老乡的一针一线',
-      }
+      layerA: {
+        header: '弹窗样式A',
+        content: '我是正文',
+      },
+      layerB: {
+        header: '弹窗样式B',
+      },
+      layerC: {
+        header: '弹窗样式C',
+      },
     }
     state.methods = {
       submit: function () {
