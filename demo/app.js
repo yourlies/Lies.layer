@@ -26,7 +26,7 @@
   LiesLayer.prototype.spans = spans;
 
   LiesLayer.prototype.renderSpans = function (context) {
-    var type = context.type;
+    var type = context.type || '';
     var content = context.content;
     var className = context.className || [];
     spans[type].innerHTML = content;
@@ -47,16 +47,33 @@
   }
 
   LiesLayer.prototype.renderFooter = function (context) {
+    var _this = this;
     footer.innerHTML = '';
-    if (context && context.length) {
-      for (var i = 0; i < context.length; i++) {
-        footer.appendChild(context[i]);
+    var context = context || [{ content: '确定', className: 'primary' }];
+    // ie8不支持map
+    for (var i = 0; i < context.length; i++) {
+      var dev = context[i];
+      var btn;
+      if (!dev.nodeType) {
+        btn = document.createElement('span');
+        btn.innerHTML = dev.content || '';
+        btn.className = dev.className || '';
+      } else {
+        btn = dev;
       }
-    } else if (context) {
-      footer.appendChild(context);
-    } else {
-      footer.appendChild(submit);
-      footer.appendChild(cancel);
+      // span.addEventListener('click', eval(value.click || LiesLayer.prototype.delete));
+      // 这里主要是为了绑定this环境，不然的话，自定义的函数没法关闭弹窗
+      var clickHandler;
+      if (dev.event) {
+        clickHandler = eval(dev.event);
+      } else {
+        if (!dev.nodeType) {
+          btn.addEventListener('click', function () {
+            clickHandler.apply({ cancelLayer: _this.delete });
+          });
+        }
+      }
+      footer.appendChild(btn);
     }
   }
 
@@ -75,8 +92,6 @@
   var Layer = new LiesLayer;
   var cls = document.querySelectorAll('[--click]');
 
-  var directives = {};
-
   var createLayer = function (payload) {
     Layer.renderHeader(payload.header);
     Layer.renderContent(payload.content);
@@ -88,8 +103,6 @@
     Layer.delete();
   }
 
-  directives.cancel = cancelLayer;
-
   var dispatcher = function (event, payload) {
     switch (event) {
       case 'create':
@@ -99,7 +112,7 @@
         cancelLayer();
         break;
       case 'bind':
-        payload.apply(directives);
+        payload.apply({ cancelLayer: Layer.delete });
         break;
       default:
         console.error('Undefined event');
@@ -123,9 +136,13 @@
       }
 
       refFooter = document.querySelectorAll('[--' + refId + '=footer]');
-      if (refFooter) {
-        for (var i = 0; i < refFooter.length; i++) {
-          refFooter[i].parentNode.removeChild(refFooter[i]);          
+      for (var i = 0; i < refFooter.length; i++) {
+        var btn = refFooter[i];
+        btn.parentNode.removeChild(btn);
+        if (!btn.getAttribute('--click')) {
+          btn.addEventListener('click', function () {
+            Layer.delete();
+          })
         }
       }
     }
@@ -141,8 +158,8 @@
         tPayload.content = refContent || tPayload.content;
         tPayload.footer = refFooter || tPayload.footer;
         dispatcher(event, tPayload);
-      } else {
-        dispatcher(event, payload);        
+      } else if (event) {
+        dispatcher(event, payload);
       }
     })
   }
@@ -150,28 +167,4 @@
   for (var i = 0; i < cls.length; i++) {
     processor.click(cls[i]);
   }
-
-  var handler = {
-    submit: 'cancel',
-    cancel: 'cancel',
-  };
-
-  Layer.renderSpans({
-    type: 'submit',
-    content: '确定',
-    className: ['submit', 'primary'],
-  });
-
-  Layer.spans.submit.addEventListener('click', function () {
-    dispatcher(handler.submit);
-  });
-
-  Layer.renderSpans({
-    type: 'cancel',
-    content: '取消',
-  });
-
-  Layer.spans.cancel.addEventListener('click', function () {
-    dispatcher(handler.cancel);
-  });
 })();

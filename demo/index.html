@@ -6,6 +6,30 @@
   <link rel="stylesheet" href="./app.css">
 </head>
 <body>
-  暂时没有demo
+<span --click="create|state.data" --id="demo">点我弹窗</span>
+<span --demo="footer">测试</span>
+<span --demo="content">asdasd</span>
+<script>
+    self.state = {};
+</script>
+<script src="./app.js"></script>
+<script>
+  state.data = {
+    header: '弹窗样式A',
+    content: '我是正文',
+    footer: [
+      {
+        event: 'state.methods.submit',
+        className: 'primary',
+        content: '实现',
+      }
+    ]
+  }
+  state.methods = {
+    submit: function () {
+      this.cancelLayer();
+    },
+  }
+</script>
 </body>
 </html>
