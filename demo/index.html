@@ -10,6 +10,7 @@
 <span --click="create|state.data" --id="demo">点我弹窗</span>
 <span --demo="footer">测试</span>
 <span --demo="content">asdasd</span>
+<span --click="toast|state.toast" id="haha">点我toast</span>
 <script>
     self.state = {};
 </script>
@@ -25,6 +26,10 @@
         content: '实现'
       }
     ]
+  }
+  state.toast = {
+      content:'1231231231',
+      time:'1000'
   }
   state.methods = {
     submit: function () {

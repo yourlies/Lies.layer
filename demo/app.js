@@ -79,6 +79,30 @@
         }
     }
 
+
+
+
+
+    LiesLayer.prototype.renderToast = function (context) {
+        console.log(context);
+        var toast = document.createElement('div');
+        toast.innerText = context['content'];
+        var body = document.getElementsByTagName('body')[0];
+        body.appendChild(toast);
+        var time = parseInt(context["time"]);
+        setTimeout(function () {
+            body.removeChild(toast);
+        },time)
+    }
+
+
+
+
+
+
+
+
+
     LiesLayer.prototype.render = function () {
         document.body.appendChild(container);
     }
@@ -89,6 +113,7 @@
         }
     }
 })();
+
 
 (function () {
     var Layer = new LiesLayer;
@@ -115,6 +140,9 @@
                 break;
             case 'bind':
                 payload.apply({ cancelLayer: Layer.delete });
+                break;
+            case 'toast':
+                Layer.renderToast(payload);
                 break;
             default:
                 console.error('Undefined event');
@@ -152,7 +180,27 @@
         ref.addEventListener('click', function () {
             var event = chips[0];
             var payload = eval(chips[1] || '') || {};
-            if (typeof payload == 'object') {
+
+
+
+
+
+
+            if (event === 'toast') {
+                var tPayload = {};
+                for (var key in payload) {
+                    tPayload[key] = payload[key];
+                }
+                dispatcher(event, tPayload);
+            }
+
+
+
+
+
+
+
+            else if (typeof payload == 'object') {
                 var tPayload = {};
                 for (var pro in payload) {
                   if((payload[pro] instanceof Array) === true) {
