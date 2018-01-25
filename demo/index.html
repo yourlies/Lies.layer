@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="./app.css">
 </head>
 <body>
+<span --click="create|state.data">点我弹窗</span>
 <span --click="create|state.data" --id="demo">点我弹窗</span>
 <span --demo="footer">测试</span>
 <span --demo="content">asdasd</span>
@@ -21,13 +22,14 @@
       {
         event: 'state.methods.submit',
         className: 'primary',
-        content: '实现',
+        content: '实现'
       }
     ]
   }
   state.methods = {
     submit: function () {
-      this.cancelLayer();
+        console.log(123);
+        this.delete();
     },
   }
 </script>
