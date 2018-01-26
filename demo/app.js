@@ -86,18 +86,33 @@
     LiesLayer.prototype.renderToast = function (context) {
         console.log(context);
         var toast = document.createElement('div');
-        toast.innerText = context['content'];
         var body = document.getElementsByTagName('body')[0];
+
+        toast.innerText = context['content'];
+        toast.className = 'toast';
         body.appendChild(toast);
+        LiesLayer.prototype.toastPosition(toast);
+
         var time = parseInt(context["time"]);
         setTimeout(function () {
             body.removeChild(toast);
         },time)
+
     }
 
 
 
+    LiesLayer.prototype.toastPosition = function (toast) {
+        var innerWidth = parseInt(document.body.clientWidth);
+        var innerHeight = parseInt(document.documentElement.clientHeight );
+        var toastWidth = parseInt(toast.offsetWidth);
+        var toastHeight = parseInt(toast.offsetHeight);
+        console.log(innerWidth, innerHeight, toastWidth, toastHeight);
 
+        toast.style.top = (innerHeight - toastHeight) / 2 + "px";
+        toast.style.left = (innerWidth - toastWidth) / 2 + "px";
+        toast.style["z-index"] = "100000";
+    }
 
 
 

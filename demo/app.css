@@ -21,9 +21,7 @@
 .layer .footer {
   text-align: center;
 }
- span + span {
-  margin-left: 10px;
-}
+
 .layer .footer span {
   cursor: pointer;
   display: inline-block;
@@ -35,4 +33,12 @@
   border: 1px solid #40bb8a;
   background-color: #40bb8a;
   color: #fff;
+}
+
+.toast {
+  background-color: rgba(153, 153, 153, .8);
+  padding: 20px 40px;
+  color: #000;
+  position: fixed;
+  max-width: 700px;
 }
