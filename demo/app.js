@@ -20,6 +20,8 @@
 
     LiesLayer.prototype.renderContent = function (context) {
         if (context && context.nodeType) {
+            console.log(context);
+            context.nodeType
             content.parentNode.replaceChild(context, content);
             content = context;
         } else {
@@ -28,7 +30,6 @@
     }
 
     LiesLayer.prototype.renderFooter = function (context) {
-        console.log(context);
         var _this = this;
         footer.innerHTML = '';
         var context = context || [{ content: '确定', className: 'primary' }];
@@ -66,7 +67,7 @@
         toast.innerText = context['content'];
         toast.className = 'toast';
         document.body.appendChild(toast);
-        LiesLayer.prototype.toastPosition(toast);
+        LiesLayer.prototype.positionCenter(toast);
 
         var time = parseInt(context["time"]);
         setTimeout(function () {
@@ -77,20 +78,20 @@
 
 
 
-    LiesLayer.prototype.toastPosition = function (toast) {
+    LiesLayer.prototype.positionCenter = function (ele) {
         var innerWidth = parseInt(document.body.clientWidth);
-        var innerHeight = parseInt(document.documentElement.clientHeight );
-        var toastWidth = parseInt(toast.offsetWidth);
-        var toastHeight = parseInt(toast.offsetHeight);
-        console.log(innerWidth, innerHeight, toastWidth, toastHeight);
+        var innerHeight = parseInt(document.documentElement.clientHeight);
+        var eleWidth = parseInt(ele.offsetWidth);
+        var eleHeight = parseInt(ele.offsetHeight);
 
-        toast.style.top = (innerHeight - toastHeight) / 2 + "px";
-        toast.style.left = (innerWidth - toastWidth) / 2 + "px";
-        toast.style["z-index"] = "100000";
+        ele.style.top = (innerHeight - eleHeight) / 2 + "px";
+        ele.style.left = (innerWidth - eleWidth) / 2 + "px";
+        ele.style["z-index"] = "10001";
     }
 
     LiesLayer.prototype.render = function () {
         document.body.appendChild(container);
+        LiesLayer.prototype.positionCenter(container);
     }
 
     LiesLayer.prototype.delete = function () {
