@@ -14,25 +14,6 @@
     container.appendChild(content);
     container.appendChild(footer);
 
-    // var submit = document.createElement('span');
-    // submit.className = 'submit';
-    // var cancel = document.createElement('span');
-    // cancel.className = 'cancel';
-
-    // var spans = {};
-    // spans.submit = submit;
-    // spans.cancel = cancel;
-    //
-    // LiesLayer.prototype.spans = spans;
-    //
-    // LiesLayer.prototype.renderSpans = function (context) {
-    //   var type = context.type || '';
-    //   var content = context.content;
-    //   var className = context.className || [];
-    //   spans[type].innerHTML = content;
-    //   spans[type].className = className.join(' ');
-    // }
-
     LiesLayer.prototype.renderHeader = function (context) {
         header.innerHTML = context || '';
     }
@@ -51,7 +32,6 @@
         var _this = this;
         footer.innerHTML = '';
         var context = context || [{ content: '确定', className: 'primary' }];
-        // ie8不支持map
         for (var i = 0; i < context.length; i++) {
             var dev = context[i];
             var btn;
@@ -62,8 +42,6 @@
             } else {
                 btn = dev;
             }
-            // span.addEventListener('click', eval(value.click || LiesLayer.prototype.delete));
-            // 这里主要是为了绑定this环境，不然的话，自定义的函数没法关闭弹窗
             var clickHandler;
             if (dev.event) {
                 clickHandler = eval(dev.event).bind(_this);
@@ -81,22 +59,19 @@
 
 
 
-
-
-    LiesLayer.prototype.renderToast = function (context) {
+        LiesLayer.prototype.renderToast = function (context) {
         console.log(context);
         var toast = document.createElement('div');
-        var body = document.getElementsByTagName('body')[0];
 
         toast.innerText = context['content'];
         toast.className = 'toast';
-        body.appendChild(toast);
+        document.body.appendChild(toast);
         LiesLayer.prototype.toastPosition(toast);
 
         var time = parseInt(context["time"]);
         setTimeout(function () {
-            body.removeChild(toast);
-        },time)
+            document.body.removeChild(toast);
+        }, time)
 
     }
 
@@ -113,10 +88,6 @@
         toast.style.left = (innerWidth - toastWidth) / 2 + "px";
         toast.style["z-index"] = "100000";
     }
-
-
-
-
 
     LiesLayer.prototype.render = function () {
         document.body.appendChild(container);
@@ -165,6 +136,30 @@
         }
     }
 
+    // 因为用var变量没有作用区块，会导致最后变量全部成了最后的值
+    var Tool = {};
+    var _deepExtend = function (object, container) {
+        for (var pro in object) {
+            // 闭包函数可以保存作用区块使得函数内部的，key，value是不会改变的
+            (function (key, value) {
+                if (value instanceof Array === true) {
+                    container[key] = [];
+                    _deepExtend(value, container[key]);
+                } else if (typeof value == 'object') {
+                    container[key] = {};
+                    _deepExtend(value, container[key]);
+                } else {
+                    container[key] = value;
+                }
+            })(pro, object[pro]);
+        }
+    }
+    Tool.deepExtend = function (object) {
+        var container = [];
+        _deepExtend(object, container);
+        return container;
+    }
+
     var processor = {};
     processor.click = function (ref) {
         var key = ref.getAttribute('--click');
@@ -196,46 +191,21 @@
             var event = chips[0];
             var payload = eval(chips[1] || '') || {};
 
-
-
-
-
-
-            if (event === 'toast') {
-                var tPayload = {};
-                for (var key in payload) {
-                    tPayload[key] = payload[key];
+            if (typeof payload == 'object') {
+                var extendPayload = Tool.deepExtend(payload);
+                switch (event){
+                    case 'create': {
+                        extendPayload.content = refContent || extendPayload.content;
+                        extendPayload.footer = refFooter || extendPayload.footer;
+                        break;
+                    }
+                    defualt: {
+                        break;
+                    }
                 }
-                dispatcher(event, tPayload);
-            }
+                dispatcher(event, extendPayload);
 
-
-
-
-
-
-
-            else if (typeof payload == 'object') {
-                var tPayload = {};
-                for (var pro in payload) {
-                  if((payload[pro] instanceof Array) === true) {
-                      tPayload[pro] = [];
-                      for (var i = 0; i < payload[pro].length; i++) {
-                          tPayload[pro][i] = {};
-                          for (var key in payload[pro][i]) {
-                              tPayload[pro][i][key] = payload[pro][i][key];
-                          }
-                      }
-                  } else {
-                      tPayload[pro] = payload[pro];
-                  }
-                }
-
-                tPayload.content = refContent || tPayload.content;
-                tPayload.footer = refFooter || tPayload.footer;
-                console.log(tPayload.footer);
-                dispatcher(event, tPayload);
-            } else if (event) {
+            } else {
                 dispatcher(event, payload);
             }
         })

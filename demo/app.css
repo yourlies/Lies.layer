@@ -6,6 +6,7 @@
   left: 200px;
   top: 200px;
   font-size: 14px;
+  animation: aaa 0.1s ease-in 0s 1 alternate;
 }
 .layer .header {
   border-bottom: 1px solid #eaeaea;
@@ -35,10 +36,18 @@
   color: #fff;
 }
 
+@keyframes aaa {
+  from {-webkit-transform: scale(0);
+    transform: scale(0);}
+  to{-webkit-transform: scale(1);
+    transform: scale(1);}
+}
+
 .toast {
   background-color: rgba(153, 153, 153, .8);
   padding: 20px 40px;
   color: #000;
   position: fixed;
   max-width: 700px;
+  animation: aaa 0.1s ease-in 0s 1 alternate;
 }
