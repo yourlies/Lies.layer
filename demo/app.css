@@ -2,28 +2,26 @@
   position: fixed;
   border: 1px solid #eaeaea;
   padding-bottom: 20px;
-  width: 350px;
-  left: 200px;
-  top: 200px;
+  width: 500px;
   font-size: 14px;
+  animation: aaa 0.1s ease-in 0s 1 alternate;
 }
 .layer .header {
   border-bottom: 1px solid #eaeaea;
   background-color: #f7f7f7;
-  padding: 8px 10px;
+  padding: 10px;
   font-weight: bold;
   color: #333;
 }
 .layer .content {
   text-align: center;
   padding: 30px;
+  color:#666;
 }
 .layer .footer {
   text-align: center;
 }
- span + span {
-  margin-left: 10px;
-}
+
 .layer .footer span {
   cursor: pointer;
   display: inline-block;
@@ -35,4 +33,21 @@
   border: 1px solid #40bb8a;
   background-color: #40bb8a;
   color: #fff;
+}
+
+@keyframes aaa {
+  from {-webkit-transform: scale(0);
+    transform: scale(0);}
+  to{-webkit-transform: scale(1);
+    transform: scale(1);}
+}
+
+.toast {
+  background-color: #333333;
+  padding: 15px 20px;
+  color: #fff;
+  position: fixed;
+  max-width: 700px;
+  border-radius: 5px;
+  animation: aaa 0.1s ease-in 0s 1 alternate;
 }

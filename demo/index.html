@@ -6,9 +6,16 @@
   <link rel="stylesheet" href="./app.css">
 </head>
 <body>
+<span --click="create|state.data">点我弹窗</span>
 <span --click="create|state.data" --id="demo">点我弹窗</span>
 <span --demo="footer">测试</span>
 <span --demo="content">asdasd</span>
+<span --click="toast|state.toast">点我toast</span>
+<span --click="toast|state.toast1">点我toast1</span>
+
+
+
+
 <script>
     self.state = {};
 </script>
@@ -21,13 +28,22 @@
       {
         event: 'state.methods.submit',
         className: 'primary',
-        content: '实现',
+        content: '实现'
       }
     ]
   }
+  state.toast = {
+      content:'暴怒号符无而飞和如风u热火能否u热火能否',
+      time:'2000'
+  }
+  state.toast1 = {
+      content:'123',
+      time:'3000'
+  }
   state.methods = {
     submit: function () {
-      this.cancelLayer();
+        console.log(123);
+        this.delete();
     },
   }
 </script>
